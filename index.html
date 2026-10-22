@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#21172f">
+<title>OTOME — prototype</title>
+<style>
+:root{--bg:#17121f;--panel:#261d33;--panel2:#32243f;--pink:#f2a9cc;--lav:#c6b3ff;--text:#fff7ff;--muted:#cbbdd5;--gold:#f4d6a0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#382342 0%,#1b1525 52%,#100d17 100%);color:var(--text);font-family:Georgia,"Hiragino Mincho ProN","Yu Mincho",serif;min-height:100svh}
+button,input{font:inherit}button{cursor:pointer;color:var(--text);border:1px solid #73577e;background:linear-gradient(135deg,#493253,#2b2038);padding:.8rem 1rem;border-radius:12px;transition:.18s}button:hover{border-color:var(--pink);transform:translateY(-1px)}button:focus-visible,input:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+.app{max-width:1000px;margin:auto;padding:clamp(12px,3vw,28px);min-height:100svh;display:flex;flex-direction:column;gap:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #5d4567;padding:8px 2px 14px}
+.brand{letter-spacing:.18em;font-size:.78rem;color:var(--pink)}.small{font-size:.8rem;color:var(--muted)}
+main{flex:1;display:flex;align-items:center;justify-content:center}
+.panel{width:100%;background:linear-gradient(160deg,rgba(52,37,66,.95),rgba(28,21,38,.97));border:1px solid #62496c;border-radius:22px;box-shadow:0 18px 60px #08050d80;overflow:hidden}
+.title-screen{padding:clamp(24px,6vw,64px);text-align:center;position:relative}
+.ornament{font-size:2.2rem;color:var(--pink);letter-spacing:.35em;margin:6px 0 20px}
+h1{font-weight:400;font-size:clamp(2.1rem,8vw,4.8rem);letter-spacing:.12em;margin:.1em 0;color:#fff3fb;text-shadow:0 0 30px #ee9acb55}
+.subtitle{letter-spacing:.22em;color:var(--lav);font-size:.85rem}
+.title-copy{max-width:520px;margin:28px auto;color:var(--muted);line-height:2}
+.actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+.primary{background:linear-gradient(135deg,#b65d91,#7251a5);border-color:#e3a6d0}
+.story{display:grid;grid-template-columns:minmax(220px, .8fr) minmax(0,1.2fr);min-height:570px}
+.visual{min-height:330px;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 35%,#75527f 0%,#3a294c 42%,#20182d 100%);position:relative}
+.visual:before,.visual:after{content:"✦";position:absolute;color:#f2c5e3;font-size:1.2rem;opacity:.75}.visual:before{top:18%;left:16%}.visual:after{right:15%;top:27%}
+.placeholder-person{width:min(74%,270px);aspect-ratio:3/4;border-radius:48% 48% 18px 18px;background:linear-gradient(155deg,#c5a5da,#7e638f 45%,#3d2d50);border:1px solid #e7c7e7aa;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-shadow:0 0 55px #dda8f533;position:relative;overflow:hidden}
+.placeholder-person:before{content:"";position:absolute;inset:8% 13% 48%;border-radius:50% 50% 35% 35%;background:linear-gradient(140deg,#f8d7e9,#b78ec6);opacity:.9}
+.person-symbol{font-size:3rem;position:relative;margin-top:30px;color:#fff3ff}
+.person-label{position:relative;font-size:.72rem;letter-spacing:.18em;margin-top:12px;color:#fff0ff}
+.story-content{display:flex;flex-direction:column;padding:clamp(16px,3vw,30px);gap:16px}
+.story-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.chapter{font-size:.75rem;color:var(--lav);letter-spacing:.12em}
+.nameplate{color:var(--pink);font-size:1rem;min-height:1.3em}
+.dialogue{font-size:1.05rem;line-height:2;white-space:pre-wrap;flex:1;min-height:150px}
+.choices{display:grid;gap:9px}.choice{width:100%;text-align:left;background:#352640}
+.story-controls{display:flex;flex-wrap:wrap;gap:8px}.story-controls button{font-size:.8rem;padding:.65rem .8rem}
+.status{display:flex;gap:8px;flex-wrap:wrap}.pill{font: .75rem sans-serif;color:var(--muted);border:1px solid #674d71;border-radius:99px;padding:6px 10px}
+.menu-panel{padding:clamp(20px,5vw,42px)}.menu-panel h2{font-weight:400;color:var(--pink);letter-spacing:.1em}
+.field{display:grid;gap:8px;margin:18px 0}.field input{width:100%;padding:12px;border-radius:10px;background:#191320;border:1px solid #6c5278;color:white}
+.slot{border:1px solid #60476b;border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;background:#2b2037}.slot p{margin:5px 0;color:var(--muted);font-size:.8rem}
+footer{text-align:center;color:#95829f;font-size:.72rem;padding:4px}
+@media(max-width:680px){.story{grid-template-columns:1fr;min-height:unset}.visual{min-height:250px;padding:14px}.placeholder-person{width:145px}.person-symbol{font-size:2.3rem;margin-top:24px}.story-content{min-height:380px}.dialogue{min-height:110px}.story-controls button{flex:1}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div><div class="brand">✦ OTOME PROJECT ✦</div><div class="small">visual novel prototype</div></div><button id="homeBtn" aria-label="タイトルへ">タイトルへ</button></header>
+<main id="screen"></main>
+<footer>Prototype v0.1 · 物語・キャラクター設定は仮置きです</footer>
+</div>
+<script>
+const screen=document.querySelector("#screen");
+const KEY="otomePrototypeSave_v1";
+const defaultName="主人公";
+let state={page:"title",playerName:defaultName,scene:"intro",index:0,affection:{},flags:{},history:[],read:[],ending:null};
+const story={
+ intro:[
+  {speaker:"",text:"これは、まだ名前のない物語。"},
+  {speaker:"",text:"登場人物も、舞台も、これから自由に決めていく。"},
+  {speaker:"？？？",text:"「ねえ。きみなら、どんな物語を始めたい？」"},
+  {speaker:"",text:"最初の選択。あなたの選ぶ言葉が、この先の物語を少しだけ変える。",choices:[
+   {text:"「一緒に考えよう」",affection:{placeholder:1},next:"response_warm"},
+   {text:"「まずは秘密を知りたい」",affection:{placeholder:2},next:"response_mystery"},
+   {text:"「自分のペースで進みたい」",affection:{placeholder:1},next:"response_calm"}
+  ]}
+ ],
+ response_warm:[{speaker:"？？？",text:"「うん。ここから、少しずつ作っていこう」"},{speaker:"",text:"この選択は好感度データに記録された。今は仮の相手だけれど、あとから本当のキャラクターに置き換えられる。",next:"end_demo"}],
+ response_mystery:[{speaker:"？？？",text:"「秘密は、ひとつずつ明かすものだよ」"},{speaker:"",text:"この選択は好感度データに記録された。今は仮の相手だけれど、あとから本当のキャラクターに置き換えられる。",next:"end_demo"}],
+ response_calm:[{speaker:"？？？",text:"「もちろん。物語の進み方だって、これから決められる」"},{speaker:"",text:"この選択は好感度データに記録された。今は仮の相手だけれど、あとから本当のキャラクターに置き換えられる。",next:"end_demo"}],
+ end_demo:[{speaker:"",text:"プロトタイプの短い導入はここまで。次は本格的な共通ルート、個別ルート、CG、エンディングを追加していこう。",ending:"demo"}]
+};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({...state,page:"story"}));return true}catch(e){return false}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s){state={...state,...s,page:"story"};renderStory();return true}}catch(e){}return false}
+function setPage(page){state.page=page;render()}
+function render(){if(state.page==="title")renderTitle();else if(state.page==="story")renderStory();else if(state.page==="name")renderName();else if(state.page==="save"||state.page==="load")renderSlots(state.page);else if(state.page==="gallery")renderGallery();else if(state.page==="profile")renderProfile();else renderTitle()}
+function renderTitle(){
+screen.innerHTML=`<section class="panel title-screen"><div class="ornament">✦ ♡ ✦</div><div class="subtitle">A STORY WAITING TO BE WRITTEN</div><h1>OTOME</h1><div class="subtitle">— YOUR CHOICE, YOUR STORY —</div><p class="title-copy">まだ名前のない物語へ。<br>選んだ言葉が、未来を変えていく。<br><span class="small">キャラクターと世界観は、これから一緒に作ろう。</span></p><div class="actions"><button class="primary" id="new">NEW GAME</button><button id="continue">CONTINUE</button><button id="load">LOAD</button><button id="gallery">GALLERY</button><button id="profile">PROFILE</button></div><p class="small">セーブはこのブラウザ内に保存されます。</p></section>`;
+document.querySelector("#new").onclick=()=>{state={page:"name",playerName:defaultName,scene:"intro",index:0,affection:{},flags:{},history:[],read:[],ending:null};setPage("name")};
+document.querySelector("#continue").onclick=()=>{if(!load())alert("セーブデータがありません。NEW GAMEから始めてね。")};
+document.querySelector("#load").onclick=()=>setPage("load");
+document.querySelector("#gallery").onclick=()=>setPage("gallery");
+document.querySelector("#profile").onclick=()=>setPage("profile");
+}
+function renderName(){
+screen.innerHTML=`<section class="panel menu-panel"><div class="subtitle">NEW GAME</div><h2>主人公の名前</h2><p>名前はあとから設定画面などで拡張できます。</p><div class="field"><label for="playerName">呼ばれたい名前</label><input id="playerName" maxlength="20" value="${esc(state.playerName===defaultName?"":state.playerName)}" placeholder="名前を入力（空欄でもOK）"></div><div class="actions"><button id="start" class="primary">物語を始める</button><button id="back">戻る</button></div></section>`;
+document.querySelector("#start").onclick=()=>{state.playerName=document.querySelector("#playerName").value.trim()||defaultName;state.scene="intro";state.index=0;state.history=[];state.read=[];state.affection={};state.flags={};state.ending=null;setPage("story")};
+document.querySelector("#back").onclick=()=>setPage("title");
+}
+function current(){const arr=story[state.scene]||[];return arr[state.index]||null}
+function renderStory(){
+const node=current();
+if(!node){state.scene="end_demo";state.index=0;return renderStory()}
+state.ending=node.ending||null;
+const isChoice=!!node.choices;
+screen.innerHTML=`<section class="panel story"><div class="visual"><div class="placeholder-person"><div class="person-symbol">✧</div><div class="person-label">CHARACTER<br>PLACEHOLDER</div></div></div><div class="story-content"><div class="story-top"><span class="chapter">PROLOGUE · ${esc(state.scene.toUpperCase())}</span><span class="small">${state.index+1}</span></div><div class="status"><span class="pill">主人公：${esc(state.playerName)}</span><span class="pill">好感度：${Object.values(state.affection).reduce((a,b)=>a+b,0)||0}</span></div><div class="nameplate">${esc(node.speaker||"")}</div><div class="dialogue" id="dialogue">${esc(node.text)}</div><div class="choices" id="choices">${isChoice?node.choices.map((c,i)=>`<button class="choice" data-choice="${i}">${esc(c.text)}</button>`).join(""):""}</div><div class="story-controls">${!isChoice?'<button id="next" class="primary">次へ　›</button>':""}<button id="save">セーブ</button><button id="load">ロード</button><button id="auto">オート：OFF</button><button id="skip">既読スキップ：OFF</button><button id="menu">タイトルへ</button></div></div></section>`;
+document.querySelectorAll("[data-choice]").forEach(b=>b.onclick=()=>choose(Number(b.dataset.choice)));
+const next=document.querySelector("#next");if(next)next.onclick=advance;
+document.querySelector("#save").onclick=()=>{const ok=save();alert(ok?"セーブしました。":"保存できませんでした。ブラウザ設定を確認してね。")};
+document.querySelector("#load").onclick=()=>setPage("load");
+document.querySelector("#menu").onclick=()=>{if(confirm("タイトルへ戻る？進行中の内容はセーブしてね。"))setPage("title")};
+document.querySelector("#auto").onclick=e=>{autoOn=!autoOn;e.currentTarget.textContent="オート："+(autoOn?"ON":"OFF");if(autoOn)autoStep()};
+document.querySelector("#skip").onclick=e=>{skipOn=!skipOn;e.currentTarget.textContent="既読スキップ："+(skipOn?"ON":"OFF");if(skipOn)skipStep()};
+const key=state.scene+":"+state.index;if(!state.read.includes(key))state.read.push(key);
+}
+let autoOn=false,skipOn=false,autoTimer=null;
+function advance(){const node=current();if(!node||node.choices)return;state.history.push({scene:state.scene,index:state.index});if(node.next){state.scene=node.next;state.index=0}else if(state.index<(story[state.scene]||[]).length-1){state.index++}else{autoOn=false;skipOn=false;alert("プロトタイプのデモはここまで！ 次は本編ルートを追加しよう。");setPage("title");return}renderStory();if(autoOn)autoStep();if(skipOn)skipStep()}
+function choose(i){const node=current(),c=node.choices[i];if(!c)return;state.history.push({scene:state.scene,index:state.index,choice:i});Object.entries(c.affection||{}).forEach(([k,v])=>state.affection[k]=(state.affection[k]||0)+v);Object.assign(state.flags,c.flags||{});state.scene=c.next;state.index=0;renderStory()}
+function autoStep(){clearTimeout(autoTimer);if(!autoOn)return;const n=current();if(n&&!n.choices)autoTimer=setTimeout(advance,2600)}
+function skipStep(){if(!skipOn)return;const n=current();if(!n||n.choices){skipOn=false;return}const key=state.scene+":"+state.index;if(state.read.includes(key)){setTimeout(()=>{if(skipOn)advance()},150)}else{skipOn=false;const b=document.querySelector("#skip");if(b)b.textContent="既読スキップ：OFF"}}
+function renderSlots(mode){
+const slots=[];for(let i=0;i<3;i++){let s=null;try{s=JSON.parse(localStorage.getItem(KEY+"_slot"+i))}catch(e){}slots.push(s)}
+screen.innerHTML=`<section class="panel menu-panel"><div class="subtitle">${mode.toUpperCase()}</div><h2>${mode==="save"?"セーブスロット":"ロードスロット"}</h2><p class="small">試作版では3つのスロットを用意しています。</p>${slots.map((s,i)=>`<div class="slot"><div><strong>SLOT ${i+1}</strong><p>${s?esc(s.scene)+" / "+esc(s.playerName)+" / 保存済み":"データなし"}</p></div><button data-slot="${i}">${mode==="save"?"保存":"ロード"}</button></div>`).join("")}<div class="actions"><button id="back">戻る</button></div></section>`;
+document.querySelectorAll("[data-slot]").forEach(b=>b.onclick=()=>{const i=Number(b.dataset.slot);if(mode==="save"){try{localStorage.setItem(KEY+"_slot"+i,JSON.stringify(state));alert("SLOT "+(i+1)+" に保存しました。");renderSlots(mode)}catch(e){alert("保存できませんでした。")}}else{const s=slots[i];if(!s){alert("このスロットにデータはありません。");return}state={...state,...s,page:"story"};renderStory()}});
+document.querySelector("#back").onclick=()=>setPage(state.scene? "story":"title");
+}
+function renderGallery(){screen.innerHTML=`<section class="panel menu-panel"><div class="subtitle">GALLERY</div><h2>CGギャラリー</h2><p>ここには、物語で解放したスチルが並びます。</p><div class="slot"><div><strong>CG 01 · 未解放</strong><p>本編のスチルを追加すると、ここから鑑賞できます。</p></div><span>🔒</span></div><div class="actions"><button id="back">戻る</button></div></section>`;document.querySelector("#back").onclick=()=>setPage("title")}
+function renderProfile(){const total=Object.values(state.affection).reduce((a,b)=>a+b,0);screen.innerHTML=`<section class="panel menu-panel"><div class="subtitle">PROFILE & PROGRESS</div><h2>プロフィール・攻略状況</h2><div class="slot"><div><strong>主人公名</strong><p>${esc(state.playerName)}</p></div></div><div class="slot"><div><strong>現在の好感度合計</strong><p>${total}</p></div></div><div class="slot"><div><strong>進行中のシーン</strong><p>${esc(state.scene)}</p></div></div><p class="small">攻略対象・エンディングの一覧は、キャラクター設定後に実装します。</p><div class="actions"><button id="back">戻る</button></div></section>`;document.querySelector("#back").onclick=()=>setPage("title")}
+document.querySelector("#homeBtn").onclick=()=>{if(state.page==="story"){if(confirm("タイトルへ戻る？"))setPage("title")}else setPage("title")};
+render();
+</script>
+</body>
+</html>
